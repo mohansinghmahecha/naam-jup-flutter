@@ -1,0 +1,31 @@
+name: naam_jup
+description: "A Naam Jup application which is very helpful for devoties"
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^2.2.0      # or provider if you prefer Provider
+  shared_preferences: ^2.0.15
+  uuid: ^3.0.6
+  intl: ^0.18.0
+  google_fonts: ^6.3.2
+  cupertino_icons: ^1.0.8
+  fl_chart: ^0.60.0   # <-- Keep this version
+  table_calendar: ^3.0.9
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+
