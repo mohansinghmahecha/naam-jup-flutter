@@ -22,14 +22,15 @@ class _HomePageState extends ConsumerState<HomePage>
   @override
   void initState() {
     super.initState();
-    _resetController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 700),
-    )..addListener(() {
-      setState(() {
-        animatedProgress = 1.0 - _resetController.value;
-      });
-    });
+    _resetController =
+        AnimationController(
+          vsync: this,
+          duration: const Duration(milliseconds: 700),
+        )..addListener(() {
+          setState(() {
+            animatedProgress = 1.0 - _resetController.value;
+          });
+        });
   }
 
   @override
@@ -44,8 +45,9 @@ class _HomePageState extends ConsumerState<HomePage>
 
     ref.read(godListProvider.notifier).incrementCount(currentGod.id);
 
-    final progress =
-        currentGod.sessionCount >= 108 ? 1.0 : currentGod.sessionCount / 108.0;
+    final progress = currentGod.sessionCount >= 108
+        ? 1.0
+        : currentGod.sessionCount / 108.0;
 
     setState(() {
       animatedProgress = progress;
@@ -67,18 +69,17 @@ class _HomePageState extends ConsumerState<HomePage>
     _resetController.reset();
     _resetController.forward().whenComplete(() async {
       final notifier = ref.read(godListProvider.notifier);
-      final gods =
-          notifier.state.map((god) {
-            if (god.id == godId) {
-              return God(
-                id: god.id,
-                name: god.name,
-                sessionCount: 0,
-                totalCount: god.totalCount,
-              );
-            }
-            return god;
-          }).toList();
+      final gods = notifier.state.map((god) {
+        if (god.id == godId) {
+          return God(
+            id: god.id,
+            name: god.name,
+            sessionCount: 0,
+            totalCount: god.totalCount,
+          );
+        }
+        return god;
+      }).toList();
 
       notifier.state = gods;
       await Future.delayed(const Duration(milliseconds: 100));
@@ -100,10 +101,9 @@ class _HomePageState extends ConsumerState<HomePage>
     }
 
     final currentGod = gods[selectedGodIndex];
-    final progress =
-        isResetting
-            ? animatedProgress
-            : (currentGod.sessionCount % 108) / 108.0;
+    final progress = isResetting
+        ? animatedProgress
+        : (currentGod.sessionCount % 108) / 108.0;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -120,9 +120,9 @@ class _HomePageState extends ConsumerState<HomePage>
                   child: Text(
                     currentGod.name,
                     style: GoogleFonts.alkatra(
-                      fontSize: 80,
+                      fontSize: 120,
                       fontWeight: FontWeight.bold,
-                      color: Colors.indigo,
+                      color: Colors.black,
                     ),
                   ),
                 ),
@@ -149,7 +149,7 @@ class _HomePageState extends ConsumerState<HomePage>
                 'Total: ${currentGod.totalCount}',
                 style: const TextStyle(
                   fontSize: 16,
-                  color: Colors.grey,
+                  color: Colors.indigo,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -173,8 +173,8 @@ class _HomePageState extends ConsumerState<HomePage>
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                onPressed:
-                    () => _showManualCountingDialog(context, ref, currentGod),
+                onPressed: () =>
+                    _showManualCountingDialog(context, ref, currentGod),
               ),
             ],
           ),
@@ -198,34 +198,33 @@ class _HomePageState extends ConsumerState<HomePage>
   ) {
     showDialog(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const Text('Select or Rename God'),
-            content: SizedBox(
-              width: double.maxFinite,
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: gods.length,
-                itemBuilder: (context, index) {
-                  final god = gods[index];
-                  return ListTile(
-                    title: Text(god.name),
-                    onTap: () {
-                      setState(() => selectedGodIndex = index);
-                      Navigator.pop(context);
-                    },
-                    trailing: IconButton(
-                      icon: const Icon(Icons.edit, size: 20),
-                      onPressed: () {
-                        Navigator.pop(context);
-                        _showRenameDialog(context, ref, god);
-                      },
-                    ),
-                  );
+      builder: (context) => AlertDialog(
+        title: const Text('Select or Rename God'),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: gods.length,
+            itemBuilder: (context, index) {
+              final god = gods[index];
+              return ListTile(
+                title: Text(god.name),
+                onTap: () {
+                  setState(() => selectedGodIndex = index);
+                  Navigator.pop(context);
                 },
-              ),
-            ),
+                trailing: IconButton(
+                  icon: const Icon(Icons.edit, size: 20),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _showRenameDialog(context, ref, god);
+                  },
+                ),
+              );
+            },
           ),
+        ),
+      ),
     );
   }
 
@@ -234,30 +233,29 @@ class _HomePageState extends ConsumerState<HomePage>
 
     showDialog(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const Text('Rename God'),
-            content: TextField(
-              controller: controller,
-              decoration: const InputDecoration(hintText: 'Enter new name'),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  final name = controller.text.trim();
-                  if (name.isNotEmpty) {
-                    ref.read(godListProvider.notifier).renameGod(god.id, name);
-                  }
-                  Navigator.pop(context);
-                },
-                child: const Text('Save'),
-              ),
-            ],
+      builder: (context) => AlertDialog(
+        title: const Text('Rename God'),
+        content: TextField(
+          controller: controller,
+          decoration: const InputDecoration(hintText: 'Enter new name'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
           ),
+          ElevatedButton(
+            onPressed: () {
+              final name = controller.text.trim();
+              if (name.isNotEmpty) {
+                ref.read(godListProvider.notifier).renameGod(god.id, name);
+              }
+              Navigator.pop(context);
+            },
+            child: const Text('Save'),
+          ),
+        ],
+      ),
     );
   }
 
@@ -266,30 +264,29 @@ class _HomePageState extends ConsumerState<HomePage>
 
     showDialog(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const Text('Add God'),
-            content: TextField(
-              controller: controller,
-              decoration: const InputDecoration(hintText: 'Enter name'),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  final name = controller.text.trim();
-                  if (name.isNotEmpty) {
-                    ref.read(godListProvider.notifier).addGod(name);
-                    Navigator.pop(context);
-                  }
-                },
-                child: const Text('Add'),
-              ),
-            ],
+      builder: (context) => AlertDialog(
+        title: const Text('Add God'),
+        content: TextField(
+          controller: controller,
+          decoration: const InputDecoration(hintText: 'Enter name'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
           ),
+          ElevatedButton(
+            onPressed: () {
+              final name = controller.text.trim();
+              if (name.isNotEmpty) {
+                ref.read(godListProvider.notifier).addGod(name);
+                Navigator.pop(context);
+              }
+            },
+            child: const Text('Add'),
+          ),
+        ],
+      ),
     );
   }
 
@@ -299,63 +296,62 @@ class _HomePageState extends ConsumerState<HomePage>
 
     showDialog(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const Text('Manual Counting'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  '⚠️ Please be genuine — only counts up to 50,000 are allowed.\n'
-                  'This will be added to the total count of the selected God.',
-                  style: TextStyle(fontSize: 14),
-                ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: controller,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: 'Enter manual count (max 50,000)',
-                    border: OutlineInputBorder(),
+      builder: (context) => AlertDialog(
+        title: const Text('Manual Counting'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              '⚠️ Please be genuine — only counts up to 50,000 are allowed.\n'
+              'This will be added to the total count of the selected God.',
+              style: TextStyle(fontSize: 14),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: controller,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: 'Enter manual count (max 50,000)',
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              final input = int.tryParse(controller.text.trim()) ?? 0;
+              if (input <= 0 || input > 50000) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Please enter a valid number (1–50,000)'),
+                  ),
+                );
+                return;
+              }
+
+              await ref
+                  .read(godListProvider.notifier)
+                  .addManualCount(god.id, input);
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    '✅ Added $input to ${god.name}\'s total count!',
                   ),
                 ),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel'),
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  final input = int.tryParse(controller.text.trim()) ?? 0;
-                  if (input <= 0 || input > 50000) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Please enter a valid number (1–50,000)'),
-                      ),
-                    );
-                    return;
-                  }
+              );
 
-                  await ref
-                      .read(godListProvider.notifier)
-                      .addManualCount(god.id, input);
-
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        '✅ Added $input to ${god.name}\'s total count!',
-                      ),
-                    ),
-                  );
-
-                  Navigator.pop(context);
-                },
-                child: const Text('Add'),
-              ),
-            ],
+              Navigator.pop(context);
+            },
+            child: const Text('Add'),
           ),
+        ],
+      ),
     );
   }
 }

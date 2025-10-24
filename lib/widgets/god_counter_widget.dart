@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/god.dart';
 
-class GodCounterWidget extends StatelessWidget {
+class GodCounterWidget extends StatefulWidget {
   final God god;
   final double progress;
   final bool isResetting;
@@ -16,71 +16,130 @@ class GodCounterWidget extends StatelessWidget {
   });
 
   @override
+  State<GodCounterWidget> createState() => _GodCounterWidgetState();
+}
+
+class _GodCounterWidgetState extends State<GodCounterWidget>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 14),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final count = widget.god.sessionCount % 108;
+
     return GestureDetector(
-      onTap: onTap,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          // Background circle
-          Container(
-            width: 220,
-            height: 220,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: const LinearGradient(
-                colors: [Colors.indigo, Colors.deepPurpleAccent],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.indigo.withOpacity(0.3),
-                  blurRadius: 20,
-                  spreadRadius: 4,
-                ),
-              ],
-            ),
-          ),
-
-          // Progress ring
-          SizedBox(
-            width: 240,
-            height: 240,
-            child: CircularProgressIndicator(
-              value: progress,
-              strokeWidth: 12,
-              backgroundColor: Colors.grey.shade300,
-              valueColor: const AlwaysStoppedAnimation(Colors.indigo),
-            ),
-          ),
-
-          // Tap count text
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+      onTap: widget.onTap,
+      child: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, _) {
+          return Stack(
+            alignment: Alignment.center,
             children: [
-              const Icon(Icons.favorite, color: Colors.white, size: 30),
-              const SizedBox(height: 6),
-              Text(
-                '${god.sessionCount % 108}',
-                style: const TextStyle(
-                  fontSize: 40,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+              // 🌞 Outer 360° Aura Ring (Smooth & Spiritual)
+              Container(
+                width: 260,
+                height: 260,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: SweepGradient(
+                    startAngle: 0,
+                    endAngle: 6.28,
+                    colors: [
+                      Colors.yellow.withOpacity(0.2),
+                      Colors.orange.withOpacity(0.6),
+                      Colors.yellow.withOpacity(0.2),
+                    ],
+                  ),
                 ),
               ),
-              const SizedBox(height: 6),
-              const Text(
-                'TAP',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white70,
-                  letterSpacing: 1.2,
+
+              // 🟡 Inner Divine Sun Circle
+              Container(
+                width: 210,
+                height: 210,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: const RadialGradient(
+                    colors: [Color(0xFFFFC107), Color(0xFFFF5722)],
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.orange.withOpacity(0.5),
+                      blurRadius: 35,
+                      spreadRadius: 10,
+                    ),
+                  ],
                 ),
+              ),
+
+              // ✨ Top → Bottom Light Movement
+              Transform.translate(
+                offset: Offset(0, (-18 + (_controller.value * 36))),
+                child: Container(
+                  width: 210,
+                  height: 210,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.yellow.withOpacity(0.55),
+                        Colors.transparent,
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
+              // ❤️ Count + Label
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.favorite, color: Colors.white, size: 30),
+
+                  const SizedBox(height: 8),
+
+                  Text(
+                    '$count',
+                    style: const TextStyle(
+                      fontSize: 48,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                      shadows: [Shadow(blurRadius: 12, color: Colors.black)],
+                    ),
+                  ),
+
+                  const SizedBox(height: 4),
+
+                  const Text(
+                    'जप',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white70,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                ],
               ),
             ],
-          ),
-        ],
+          );
+        },
       ),
     );
   }

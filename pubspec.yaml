@@ -1,4 +1,4 @@
-name: naam_jup
+name: jup
 description: "A Naam Jup application which is very helpful for devoties"
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -20,6 +20,7 @@ dependencies:
   fl_chart: ^0.60.0   # <-- Keep this version
   table_calendar: ^3.0.9
   home_widget: ^0.8.1
+  flutter_native_splash: ^2.4.7
 
 
 dev_dependencies:
@@ -29,4 +30,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/icon/app_icon.jpg
+    - assets/icon/mala_ring.png
 

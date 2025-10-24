@@ -16,10 +16,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Devotional Counter',
+      title: 'Naam Jup Counter',
       theme: ThemeData(
-        primarySwatch: Colors.indigo,
-        scaffoldBackgroundColor: Colors.white,
+        // primarySwatch: Colors.indigo,
+        // scaffoldBackgroundColor: Colors.yellow,
         textTheme: GoogleFonts.poppinsTextTheme(), // Global Poppins
       ),
       home: const RootScaffold(),
@@ -53,10 +53,20 @@ class _RootScaffoldState extends State<RootScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Devotional Counter'),
-        centerTitle: true,
-      ),
+      appBar: _selectedIndex == 1
+          ? null // ✅ No default appBar in Analysis Page
+          : AppBar(
+              backgroundColor: const Color.fromARGB(255, 249, 253, 8),
+              title: const Text(
+                'Naam Jup Counter',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w200,
+                ),
+              ),
+              centerTitle: true,
+              elevation: 8,
+            ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
