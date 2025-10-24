@@ -1,6 +1,7 @@
 // lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jup/screens/Ai.dart';
 import 'pages/home_page.dart';
 import 'pages/analysis_page.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -42,6 +43,7 @@ class _RootScaffoldState extends State<RootScaffold> {
     HomePage(),
     AnalysisPage(),
     TrustBuildPlaceholder(),
+    Ai(),
   ];
 
   void _onItemTapped(int index) {
@@ -56,13 +58,10 @@ class _RootScaffoldState extends State<RootScaffold> {
       appBar: _selectedIndex == 1
           ? null // ✅ No default appBar in Analysis Page
           : AppBar(
-              backgroundColor: const Color.fromARGB(255, 249, 253, 8),
+              backgroundColor: const Color.fromARGB(255, 255, 255, 255),
               title: const Text(
-                'Naam Jup Counter',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w200,
-                ),
+                'Naam Jup Counter 🕉️',
+                style: TextStyle(color: Colors.black),
               ),
               centerTitle: true,
               elevation: 8,
@@ -71,6 +70,10 @@ class _RootScaffoldState extends State<RootScaffold> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
+        selectedItemColor: Colors.orange, // 🔥 Active icon/text color
+        unselectedItemColor: Colors.grey, // ⚪ Inactive icon/text color
+        backgroundColor: Colors.white, // optional: bar ka background
+        showUnselectedLabels: true, // optional: inactive labels bhi dikhें
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
@@ -86,6 +89,11 @@ class _RootScaffoldState extends State<RootScaffold> {
             icon: Icon(Icons.heart_broken_outlined),
             activeIcon: Icon(Icons.heart_broken),
             label: 'Trust Build',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.all_inclusive_sharp),
+            activeIcon: Icon(Icons.heart_broken),
+            label: 'AI',
           ),
         ],
       ),

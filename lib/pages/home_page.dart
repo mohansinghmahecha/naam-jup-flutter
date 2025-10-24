@@ -39,7 +39,6 @@ class _HomePageState extends ConsumerState<HomePage>
     super.dispose();
   }
 
-  // 🧘‍♂️ Handle Tap
   void _onTap(God currentGod) {
     if (isResetting) return;
 
@@ -53,7 +52,6 @@ class _HomePageState extends ConsumerState<HomePage>
       animatedProgress = progress;
     });
 
-    // Auto reset after 108
     if (currentGod.sessionCount + 1 >= 108) {
       Future.delayed(const Duration(milliseconds: 250), () {
         _animateReset(currentGod.id);
@@ -61,7 +59,6 @@ class _HomePageState extends ConsumerState<HomePage>
     }
   }
 
-  // 🔄 Reset animation
   void _animateReset(String godId) {
     if (isResetting) return;
     isResetting = true;
@@ -105,86 +102,129 @@ class _HomePageState extends ConsumerState<HomePage>
         ? animatedProgress
         : (currentGod.sessionCount % 108) / 108.0;
 
+    final width = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // ---------- GOD NAME ----------
-              GestureDetector(
-                onTap: () => _showGodSelectionDialog(context, ref, gods),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    currentGod.name,
-                    style: GoogleFonts.alkatra(
-                      fontSize: 120,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color.fromARGB(255, 243, 241, 234), // light saffron
+              Color(0xFFFFB74D), // soft orange
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              // padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // ---------- HEADER ----------
+                  Text(
+                    "||  श्री  ||",
+                    style: GoogleFonts.inter(
+                      fontSize: 18,
+                      color: Colors.black87,
                     ),
                   ),
-                ),
-              ),
 
-              const SizedBox(height: 40),
-
-              // ---------- COUNTER WIDGET ----------
-              GodCounterWidget(
-                god: currentGod,
-                progress: progress,
-                isResetting: isResetting,
-                onTap: () => _onTap(currentGod),
-              ),
-
-              const SizedBox(height: 30),
-
-              // ---------- COUNTERS ----------
-              Text(
-                'Malla: ${currentGod.sessionCount % 108} / 108',
-                style: const TextStyle(fontSize: 18),
-              ),
-              Text(
-                'Total: ${currentGod.totalCount}',
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.indigo,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-
-              const SizedBox(height: 40),
-
-              // ---------- MANUAL COUNT BUTTON ----------
-              ElevatedButton.icon(
-                icon: const Icon(Icons.edit, color: Colors.white),
-                label: const Text(
-                  "Manual Counting",
-                  style: TextStyle(color: Colors.white),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.indigo,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 12,
+                  // const SizedBox(height: 40),
+                  // ---------- GOD NAME ----------
+                  GestureDetector(
+                    onTap: () => _showGodSelectionDialog(context, ref, gods),
+                    child: Text(
+                      currentGod.name,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.alkatra(
+                        fontSize: 98,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
                   ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+
+                  const SizedBox(height: 40),
+
+                  // ---------- COUNTER WIDGET ----------
+                  GodCounterWidget(
+                    god: currentGod,
+                    progress: progress,
+                    isResetting: isResetting,
+                    onTap: () => _onTap(currentGod),
                   ),
-                ),
-                onPressed: () =>
-                    _showManualCountingDialog(context, ref, currentGod),
+
+                  const SizedBox(height: 30),
+
+                  // ---------- COUNTERS ----------
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 12,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.85),
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          "Malla: ${currentGod.sessionCount % 108} / 108",
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          "Total: ${currentGod.totalCount}",
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.black87,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 40),
+
+                  // ---------- MANUAL COUNT BUTTON ----------
+                  ElevatedButton.icon(
+                    icon: const Icon(Icons.edit, color: Colors.white),
+                    label: const Text(
+                      "Manual Counting",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 28,
+                        vertical: 14,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                    ),
+                    onPressed: () =>
+                        _showManualCountingDialog(context, ref, currentGod),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
 
       // ---------- ADD NEW GOD ----------
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.black,
         onPressed: () => _showAddGodDialog(context, ref),
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
@@ -290,7 +330,6 @@ class _HomePageState extends ConsumerState<HomePage>
     );
   }
 
-  // ✅ Manual Counting Dialog
   void _showManualCountingDialog(BuildContext context, WidgetRef ref, God god) {
     final controller = TextEditingController();
 
