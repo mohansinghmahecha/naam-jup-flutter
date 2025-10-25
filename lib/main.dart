@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jup/screens/Ai.dart';
+import 'package:jup/screens/AiDemo.dart';
 import 'pages/home_page.dart';
 import 'pages/analysis_page.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -45,7 +45,7 @@ class _RootScaffoldState extends State<RootScaffold> {
     HomePage(),
     AnalysisPage(),
     TrustBuildPlaceholder(),
-    Ai(),
+    AiDemo(),
   ];
 
   void _onItemTapped(int index) {
