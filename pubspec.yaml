@@ -30,14 +30,14 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
-
+#flutter pub run flutter_native_splash:create
 flutter_native_splash:
   android: true
   ios: true
 
   color: "#D64151"
-  image: assets/icon/mala_ring.png
-  branding: assets/icon/branding.png
+  image: assets/icon/app_icon.jpg
+#  branding: assets/icon/branding.png
 
   branding_bottom_padding_ios: 35
 
@@ -46,7 +46,7 @@ flutter_native_splash:
   android_12:
     color: "#D64151"
     color_dark: "#332828"
-    image: assets/icon/mala_ring.png
+    image: assets/icon/app_icon.jpg
     branding: assets/icon/branding.png
 
 flutter:
