@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jup/screens/AiDemo.dart';
-import 'pages/home_page.dart';
+import 'pages/home/home_page.dart';
 import 'pages/analysis_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'observers/my_provider_observer.dart'; // ✅ import the observer
 
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(ProviderScope(observers: [MyProviderObserver()], child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

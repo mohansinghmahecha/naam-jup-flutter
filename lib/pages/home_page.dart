@@ -36,7 +36,8 @@ class _HomePageState extends ConsumerState<HomePage>
 
     _loadSelectedGod();
   }
-    @override
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _syncSelectedGodWithPrefs();
@@ -77,8 +78,6 @@ class _HomePageState extends ConsumerState<HomePage>
       });
     }
   }
-
-
 
   @override
   void dispose() {
