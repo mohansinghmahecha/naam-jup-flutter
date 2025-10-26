@@ -30,24 +30,26 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+
+
 #flutter pub run flutter_native_splash:create
 flutter_native_splash:
   android: true
   ios: true
 
-  color: "#D64151"
+  color: "#FF8161"
   image: assets/icon/app_icon.jpg
 #  branding: assets/icon/branding.png
 
-  branding_bottom_padding_ios: 35
+  # branding_bottom_padding_ios: 35
 
-  color_dark: "#332828"
+  # color_dark: "#332828"
 
   android_12:
-    color: "#D64151"
-    color_dark: "#332828"
+    color: "#FF8161"
+    # color_dark: "#332828"
     image: assets/icon/app_icon.jpg
-    branding: assets/icon/branding.png
+    # branding: assets/icon/branding.png
 
 flutter:
   uses-material-design: true

@@ -5,6 +5,7 @@ import '../models/god.dart';
 import '../services/storage_service.dart';
 import 'package:intl/intl.dart';
 
+
 final godListProvider = StateNotifierProvider<GodListNotifier, List<God>>((
   ref,
 ) {
@@ -35,23 +36,22 @@ class GodListNotifier extends StateNotifier<List<God>> {
 
   // ---------------- Increment Count ----------------
   Future<void> incrementCount(String id) async {
-    final updated =
-        state.map((god) {
-          if (god.id == id) {
-            int newSession = god.sessionCount + 1; // unlimited
-            int newTotal = god.totalCount + 1;
+    final updated = state.map((god) {
+      if (god.id == id) {
+        int newSession = god.sessionCount + 1; // unlimited
+        int newTotal = god.totalCount + 1;
 
-            _updateDailyCount(god.id); // track daily count
+        _updateDailyCount(god.id); // track daily count
 
-            return God(
-              id: god.id,
-              name: god.name,
-              sessionCount: newSession,
-              totalCount: newTotal,
-            );
-          }
-          return god;
-        }).toList();
+        return God(
+          id: god.id,
+          name: god.name,
+          sessionCount: newSession,
+          totalCount: newTotal,
+        );
+      }
+      return god;
+    }).toList();
 
     state = updated;
     await StorageService.saveGods(state);
@@ -109,18 +109,17 @@ class GodListNotifier extends StateNotifier<List<God>> {
   // ---------------- Manual Count Update ----------------
   Future<void> addManualCount(String godId, int count) async {
     // 1️⃣ Update god totals
-    final updated =
-        state.map((god) {
-          if (god.id == godId) {
-            return God(
-              id: god.id,
-              name: god.name,
-              sessionCount: god.sessionCount,
-              totalCount: god.totalCount + count,
-            );
-          }
-          return god;
-        }).toList();
+    final updated = state.map((god) {
+      if (god.id == godId) {
+        return God(
+          id: god.id,
+          name: god.name,
+          sessionCount: god.sessionCount,
+          totalCount: god.totalCount + count,
+        );
+      }
+      return god;
+    }).toList();
     state = updated;
     await StorageService.saveGods(state);
 
@@ -144,18 +143,17 @@ class GodListNotifier extends StateNotifier<List<God>> {
 
   // ---------------- Rename God ----------------
   Future<void> renameGod(String id, String newName) async {
-    final updated =
-        state.map((god) {
-          if (god.id == id) {
-            return God(
-              id: god.id,
-              name: newName,
-              sessionCount: god.sessionCount,
-              totalCount: god.totalCount,
-            );
-          }
-          return god;
-        }).toList();
+    final updated = state.map((god) {
+      if (god.id == id) {
+        return God(
+          id: god.id,
+          name: newName,
+          sessionCount: god.sessionCount,
+          totalCount: god.totalCount,
+        );
+      }
+      return god;
+    }).toList();
     state = updated;
     await StorageService.saveGods(state);
   }
@@ -169,6 +167,15 @@ class GodListNotifier extends StateNotifier<List<God>> {
       totalCount: 0,
     );
     state = [...state, newGod];
+    await StorageService.saveGods(state);
+  }
+
+  // ---------------- Remove God ----------------
+  Future<void> removeGod(String id) async {
+    // 1️⃣ Remove the god from the list
+    state = state.where((god) => god.id != id).toList();
+
+    // 2️⃣ Save updated list to storage
     await StorageService.saveGods(state);
   }
 }
