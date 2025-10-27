@@ -1,16 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jup/screens/AiDemo.dart';
-import 'pages/home/home_page.dart';
-import 'pages/analysis_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'observers/my_provider_observer.dart'; // ✅ import the observer
+import 'package:awesome_notifications/awesome_notifications.dart';
 
-void main() {
+import 'observers/my_provider_observer.dart';
+import 'screens/AiDemo.dart';
+import 'pages/home/home_page.dart';
+import 'pages/analysis_page.dart';
+
+void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  runApp(ProviderScope(observers: [MyProviderObserver()], child: MyApp()));
+
+  AwesomeNotifications().initialize(
+    null, // ✅ no custom small icon → uses default app icon
+    [
+      NotificationChannel(
+        channelKey: 'default_channel',
+        channelName: 'Default Notifications',
+        channelDescription: 'Notification Channel for App',
+        importance: NotificationImportance.High,
+        playSound: true,
+        soundSource: 'resource://raw/ram', // ✅ custom sound works
+      ),
+    ],
+  );
+
+  // ✅ Request Notification Permission
+  bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
+  if (!isAllowed) {
+    await AwesomeNotifications().requestPermissionToSendNotifications();
+  }
+
+  runApp(
+    ProviderScope(observers: [MyProviderObserver()], child: const MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -18,7 +43,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ✅ Remove splash right after first frame renders
     WidgetsBinding.instance.addPostFrameCallback((_) {
       FlutterNativeSplash.remove();
     });
@@ -50,9 +74,7 @@ class _RootScaffoldState extends State<RootScaffold> {
   ];
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    setState(() => _selectedIndex = index);
   }
 
   @override
@@ -95,7 +117,7 @@ class _RootScaffoldState extends State<RootScaffold> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.all_inclusive_sharp),
-            activeIcon: Icon(Icons.heart_broken),
+            activeIcon: Icon(Icons.all_inclusive),
             label: 'AI',
           ),
         ],

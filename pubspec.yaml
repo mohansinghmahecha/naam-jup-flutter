@@ -14,7 +14,9 @@ dependencies:
   flutter_riverpod: ^2.2.0      # or provider if you prefer Provider
   shared_preferences: ^2.0.15
   uuid: ^3.0.6
-  intl: ^0.18.0
+  # intl: ^0.18.0
+  intl: ^0.20.2
+
   google_fonts: ^6.3.2
   cupertino_icons: ^1.0.8
   fl_chart: ^0.60.0   # <-- Keep this version
@@ -23,6 +25,9 @@ dependencies:
   flutter_native_splash: ^2.4.7
   speech_to_text: ^7.3.0
   permission_handler: ^11.3.1
+  # awesome_notifications: ^0.8.2
+  awesome_notifications: ^0.10.1
+
 
 
 
@@ -58,4 +63,5 @@ flutter:
     - assets/icon/app_icon.jpg
     - assets/icon/mala_ring.png
     - assets/icon/branding.png
+    - assets/audio/ram.mp3
 
