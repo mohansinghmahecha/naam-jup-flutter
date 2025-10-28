@@ -42,7 +42,9 @@ flutter_native_splash:
   android: true
   ios: true
   color: "#FFF38B "
-  image: assets/icon/app_icon.jpg
+  image: assets/icon/transparent.png
+  web_image_mode: contain
+
 #  branding: assets/icon/branding.png
   # branding_bottom_padding_ios: 35
   # color_dark: "#332828"
@@ -50,7 +52,8 @@ flutter_native_splash:
   android_12:
     color: "#FFF38B "
     # color_dark: "#332828"
-    image: assets/icon/app_icon.jpg
+    image: assets/icon/transparent.png
+    # image_scale: 0.3
     # branding: assets/icon/branding.png
 
 flutter:
@@ -60,4 +63,5 @@ flutter:
     - assets/icon/mala_ring.png
     - assets/icon/branding.png
     - assets/audio/ram.mp3
+    - assets/icon/transparent.png
 

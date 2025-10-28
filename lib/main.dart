@@ -83,9 +83,9 @@ class _RootScaffoldState extends State<RootScaffold> {
       appBar: _selectedIndex == 1
           ? null
           : AppBar(
-              backgroundColor: Colors.white,
+              backgroundColor: Colors.yellow.shade700,
               title: const Text(
-                'Naam Jup Counter 🕉️',
+                'Naam Jaap Counter 🕉️',
                 style: TextStyle(color: Colors.black),
               ),
               centerTitle: true,
