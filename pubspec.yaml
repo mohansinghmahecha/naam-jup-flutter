@@ -25,7 +25,6 @@ dependencies:
   flutter_native_splash: ^2.4.7
   speech_to_text: ^7.3.0
   permission_handler: ^11.3.1
-  # awesome_notifications: ^0.8.2
   awesome_notifications: ^0.10.1
 
 
@@ -42,17 +41,14 @@ dev_dependencies:
 flutter_native_splash:
   android: true
   ios: true
-
-  color: "#FF8161"
+  color: "#FFF38B "
   image: assets/icon/app_icon.jpg
 #  branding: assets/icon/branding.png
-
   # branding_bottom_padding_ios: 35
-
   # color_dark: "#332828"
 
   android_12:
-    color: "#FF8161"
+    color: "#FFF38B "
     # color_dark: "#332828"
     image: assets/icon/app_icon.jpg
     # branding: assets/icon/branding.png

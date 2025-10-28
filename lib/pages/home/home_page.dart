@@ -87,6 +87,7 @@ class _HomePageState extends ConsumerState<HomePage>
                     //     showManageGodsSheet(context, ref, controller),
                   ),
                 ),
+                SizedBox(height: 20),
               ],
             ),
           ),
