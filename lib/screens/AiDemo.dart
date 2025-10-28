@@ -90,8 +90,8 @@ class _AiDemoState extends ConsumerState<AiDemo>
       localeId: 'hi-IN',
       partialResults: true,
       listenMode: stt.ListenMode.dictation,
-      pauseFor: const Duration(seconds: 5), // wait 5s of silence to finalize
-      listenFor: const Duration(minutes: 30),
+      pauseFor: const Duration(minutes: 10), // wait 5s of silence to finalize
+      listenFor: const Duration(minutes: 59),
       onResult: _onSpeechResult,
     );
 
@@ -377,7 +377,6 @@ class _AiDemoState extends ConsumerState<AiDemo>
         child: Column(
           children: [
             const SizedBox(height: 18),
-
             // Header
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -397,7 +396,7 @@ class _AiDemoState extends ConsumerState<AiDemo>
                       'Naam Jaap — Voice Counter',
                       style: GoogleFonts.poppins(
                         color: Colors.white,
-                        fontSize: 20,
+                        fontSize: 14,
                         fontWeight: FontWeight.w700,
                       ),
                     ),

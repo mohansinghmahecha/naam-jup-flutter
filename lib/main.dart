@@ -86,10 +86,10 @@ class _RootScaffoldState extends State<RootScaffold> {
               backgroundColor: Colors.yellow.shade700,
               title: const Text(
                 'Naam Jaap Counter 🕉️',
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(color: Colors.black, fontSize: 14),
               ),
               centerTitle: true,
-              elevation: 8,
+              elevation: 5,
             ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(

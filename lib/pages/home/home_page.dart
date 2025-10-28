@@ -64,13 +64,17 @@ class _HomePageState extends ConsumerState<HomePage>
                   CrossAxisAlignment.stretch, // <-- full width children
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                GodProgressSection(
-                  currentGod: currentGod,
-                  progress: progress,
-                  isResetting: controller.isResetting,
+                GestureDetector(
                   onTap: () => controller.onTap(currentGod),
-                  onChangeName: () =>
-                      showManageGodsSheet(context, ref, controller),
+                  behavior: HitTestBehavior.translucent,
+                  child: GodProgressSection(
+                    currentGod: currentGod,
+                    progress: progress,
+                    isResetting: controller.isResetting,
+                    onTap: () => controller.onTap(currentGod),
+                    onChangeName: () =>
+                        showManageGodsSheet(context, ref, controller),
+                  ),
                 ),
 
                 const SizedBox(height: 30),

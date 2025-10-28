@@ -53,10 +53,69 @@ class _AnalysisPageState extends State<AnalysisPage>
   }
 
   // --- Data Filtering (Unchanged) ---
+  // Map<String, int> _getFilteredCounts(String range) {
+  //   final now = DateTime.now();
+  //   final Map<String, int> totals = {};
+
+  //   dailyData.forEach((dateString, godsMap) {
+  //     final date = DateTime.tryParse(dateString.trim());
+  //     if (date == null) return;
+  //     bool include = false;
+
+  //     if (range == 'daily') {
+  //       include =
+  //           DateFormat('yyyy-MM-dd').format(date) ==
+  //           DateFormat('yyyy-MM-dd').format(now);
+  //     } else if (range == 'monthly') {
+  //       include = date.isAfter(now.subtract(const Duration(days: 30)));
+  //     } else if (range == 'yearly') {
+  //       include = date.isAfter(now.subtract(const Duration(days: 365)));
+  //     }
+
+  //     if (include && godsMap is Map) {
+  //       (godsMap as Map).forEach((godId, count) {
+  //         final int value =
+  //             (count is int) ? count : int.tryParse(count.toString()) ?? 0;
+  //         totals[godId] = (totals[godId] ?? 0) + value;
+  //       });
+  //     }
+  //   });
+
+  //   totals.removeWhere((_, c) => c == 0);
+  //   return totals;
+  // }
   Map<String, int> _getFilteredCounts(String range) {
     final now = DateTime.now();
     final Map<String, int> totals = {};
 
+    if (range == 'yearly') {
+      // Group data by year instead of godId
+      final Map<int, int> yearlyTotals = {};
+
+      dailyData.forEach((dateString, godsMap) {
+        final date = DateTime.tryParse(dateString.trim());
+        if (date == null) return;
+
+        int year = date.year;
+
+        if (godsMap is Map) {
+          (godsMap as Map).forEach((godId, count) {
+            final int value = (count is int)
+                ? count
+                : int.tryParse(count.toString()) ?? 0;
+            yearlyTotals[year] = (yearlyTotals[year] ?? 0) + value;
+          });
+        }
+      });
+
+      // Convert to Map<String, int> (for chart compatibility)
+      yearlyTotals.forEach((y, total) {
+        totals[y.toString()] = total;
+      });
+      return totals;
+    }
+
+    // --- Daily / Monthly logic (unchanged) ---
     dailyData.forEach((dateString, godsMap) {
       final date = DateTime.tryParse(dateString.trim());
       if (date == null) return;
@@ -68,14 +127,13 @@ class _AnalysisPageState extends State<AnalysisPage>
             DateFormat('yyyy-MM-dd').format(now);
       } else if (range == 'monthly') {
         include = date.isAfter(now.subtract(const Duration(days: 30)));
-      } else if (range == 'yearly') {
-        include = date.isAfter(now.subtract(const Duration(days: 365)));
       }
 
       if (include && godsMap is Map) {
         (godsMap as Map).forEach((godId, count) {
-          final int value =
-              (count is int) ? count : int.tryParse(count.toString()) ?? 0;
+          final int value = (count is int)
+              ? count
+              : int.tryParse(count.toString()) ?? 0;
           totals[godId] = (totals[godId] ?? 0) + value;
         });
       }
@@ -152,9 +210,17 @@ class _AnalysisPageState extends State<AnalysisPage>
     }
 
     final counts = totals.values.toList();
-    final labels = totals.keys.map((k) => godNames[k] ?? k).toList();
+    final rawKeys = totals.keys.toList();
+
+    // ✅ Detect if keys are year numbers (like 2023, 2024)
+    final isYearly = rawKeys.every((k) => int.tryParse(k) != null);
+
+    // ✅ If not yearly, map god IDs → god names
+    final labels = isYearly
+        ? rawKeys
+        : rawKeys.map((k) => godNames[k] ?? k).toList();
+
     final maxY = counts.reduce(math.max).toDouble();
-    // Add 20% headroom to the chart's Y-axis for better spacing
     final chartMaxY = (maxY * 1.2).ceilToDouble();
 
     return SizedBox(
@@ -171,7 +237,7 @@ class _AnalysisPageState extends State<AnalysisPage>
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
-                reservedSize: 38, // Give labels a bit more space
+                reservedSize: 36,
                 getTitlesWidget: (value, meta) {
                   int index = value.toInt();
                   if (index < 0 || index >= labels.length) {
@@ -183,9 +249,9 @@ class _AnalysisPageState extends State<AnalysisPage>
                     child: Text(
                       labels[index],
                       style: TextStyle(
-                        fontSize: 12, // Slightly larger for readability
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.w600,
                         color: _darkTextColor,
-                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   );
@@ -200,11 +266,9 @@ class _AnalysisPageState extends State<AnalysisPage>
                 BarChartRodData(
                   toY: counts[i].toDouble(),
                   width: 22,
-                  // Use a vertical-only border radius
                   borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(6),
                   ),
-                  // Use the new theme gradient
                   gradient: const LinearGradient(
                     colors: [_secondaryColor, _primaryColor],
                     begin: Alignment.bottomCenter,
@@ -293,8 +357,8 @@ class _AnalysisPageState extends State<AnalysisPage>
       backgroundColor: _scaffoldBgColor, // Use soft grey background
       appBar: AppBar(
         title: Text(
-          "Naam Jap Stats",
-          style: TextStyle(color: _darkTextColor, fontWeight: FontWeight.w600),
+          "Naam Jaap Stats",
+          style: TextStyle(color: Colors.black, fontSize: 14),
         ),
         centerTitle: true,
         backgroundColor: _cardBgColor, // Use white for AppBar
@@ -311,19 +375,16 @@ class _AnalysisPageState extends State<AnalysisPage>
           ],
         ),
       ),
-      body:
-          isLoading
-              ? const Center(
-                child: CircularProgressIndicator(color: _primaryColor),
-              )
-              : TabBarView(
-                controller: _tabController,
-                children: [
-                  _buildTabContent('daily', "Today's Stats"),
-                  _buildTabContent('monthly', "Last 30 Days"),
-                  _buildTabContent('yearly', "This Year"),
-                ],
-              ),
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator(color: _primaryColor))
+          : TabBarView(
+              controller: _tabController,
+              children: [
+                _buildTabContent('daily', "Today's Stats"),
+                _buildTabContent('monthly', "Last 30 Days"),
+                _buildTabContent('yearly', "This Year"),
+              ],
+            ),
     );
   }
 }

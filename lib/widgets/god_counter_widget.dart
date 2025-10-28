@@ -44,102 +44,108 @@ class _GodCounterWidgetState extends State<GodCounterWidget>
 
     return GestureDetector(
       onTap: widget.onTap,
-      child: AnimatedBuilder(
-        animation: _controller,
-        builder: (context, _) {
-          return Stack(
-            alignment: Alignment.center,
-            children: [
-              // 🌞 Outer 360° Aura Ring (Smooth & Spiritual)
-              Container(
-                width: 260,
-                height: 260,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: SweepGradient(
-                    startAngle: 0,
-                    endAngle: 6.28,
-                    colors: [
-                      Colors.yellow.withOpacity(0.2),
-                      Colors.orange.withOpacity(0.6),
-                      Colors.yellow.withOpacity(0.2),
-                    ],
-                  ),
-                ),
-              ),
-
-              // 🟡 Inner Divine Sun Circle
-              Container(
-                width: 210,
-                height: 210,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: const RadialGradient(
-                    colors: [Color(0xFFFFC107), Color(0xFFFF5722)],
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.orange.withOpacity(0.5),
-                      blurRadius: 35,
-                      spreadRadius: 10,
-                    ),
-                  ],
-                ),
-              ),
-
-              // ✨ Top → Bottom Light Movement
-              Transform.translate(
-                offset: Offset(0, (-18 + (_controller.value * 36))),
-                child: Container(
-                  width: 210,
-                  height: 210,
+      behavior: HitTestBehavior.opaque, // ✅ makes empty areas clickable too
+      child: Container(
+        width: 320, // ✅ bigger rectangular tap area
+        height: 320,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: Colors.transparent,
+        ),
+        child: AnimatedBuilder(
+          animation: _controller,
+          builder: (context, _) {
+            return Stack(
+              alignment: Alignment.center,
+              children: [
+                // 🌞 Outer 360° Aura Ring (Smooth & Spiritual)
+                Container(
+                  width: 260,
+                  height: 260,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
+                    gradient: SweepGradient(
+                      startAngle: 0,
+                      endAngle: 6.28,
                       colors: [
-                        Colors.yellow.withOpacity(0.55),
-                        Colors.transparent,
+                        Colors.yellow.withOpacity(0.2),
+                        Colors.orange.withOpacity(0.6),
+                        Colors.yellow.withOpacity(0.2),
                       ],
                     ),
                   ),
                 ),
-              ),
 
-              // ❤️ Count + Label
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.favorite, color: Colors.white, size: 30),
+                // 🟡 Inner Divine Sun Circle
+                Container(
+                  width: 210,
+                  height: 210,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: const RadialGradient(
+                      colors: [Color(0xFFFFC107), Color(0xFFFF5722)],
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.orange.withOpacity(0.5),
+                        blurRadius: 35,
+                        spreadRadius: 10,
+                      ),
+                    ],
+                  ),
+                ),
 
-                  const SizedBox(height: 8),
-
-                  Text(
-                    '$count',
-                    style: const TextStyle(
-                      fontSize: 48,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                      shadows: [Shadow(blurRadius: 12, color: Colors.black)],
+                // ✨ Top → Bottom Light Movement
+                Transform.translate(
+                  offset: Offset(0, (-18 + (_controller.value * 36))),
+                  child: Container(
+                    width: 210,
+                    height: 210,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.yellow.withOpacity(0.55),
+                          Colors.transparent,
+                        ],
+                      ),
                     ),
                   ),
+                ),
 
-                  const SizedBox(height: 4),
-
-                  const Text(
-                    'जप',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white70,
-                      letterSpacing: 1.2,
+                // ❤️ Count + Label
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.favorite, color: Colors.white, size: 30),
+                    const SizedBox(height: 8),
+                    Text(
+                      '$count',
+                      style: const TextStyle(
+                        fontSize: 48,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        shadows: [Shadow(blurRadius: 12, color: Colors.black)],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
-          );
-        },
+                    const SizedBox(height: 4),
+                    const Text(
+                      'जप',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white70,
+                        letterSpacing: 1.2,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

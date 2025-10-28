@@ -26,6 +26,7 @@ dependencies:
   speech_to_text: ^7.3.0
   permission_handler: ^11.3.1
   awesome_notifications: ^0.10.1
+  auto_size_text: ^3.0.0
 
 
 
